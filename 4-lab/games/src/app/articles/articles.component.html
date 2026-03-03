@@ -1,0 +1,9 @@
+<ul>
+  @for (a of articles; track a) {
+    <app-article
+      [article]="a"
+      [articleDesc]="a.description"
+      (addToCart)="addToCart($event)"
+    ></app-article>
+  }
+</ul>
