@@ -1,0 +1,16 @@
+<div class="counter-container">
+  <div>
+    <button (click)="of()">of()</button>
+    <button (click)="pipe()">from()</button>
+    <button (click)="tap()">tap()</button>
+  </div>
+
+  <div class="result">
+    @if (results.length === 0) {
+      <p>Click a button to see the result.</p>
+    }
+    @for (r of results; track $index) {
+      <p>{{ r }}</p>
+    }
+  </div>
+</div>

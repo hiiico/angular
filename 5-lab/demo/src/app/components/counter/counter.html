@@ -1,0 +1,10 @@
+<div class="demo-container">
+  <div class="button-group">
+    <button class="btn" (click)="counterService.decrement()" [disabled]="counterService.count === 0">−</button>
+    <button class="btn" (click)="counterService.increment()">+</button>
+    <button class="btn" (click)="counterService.reset()">Reset</button>
+  </div>
+  <div class="display">
+    <span class="value">{{ counterService.count }}</span>
+  </div>
+</div>
