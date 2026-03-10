@@ -1,0 +1,104 @@
+.counter-container {
+  max-width: 700px;
+  width: 100%;
+  background: #161b22;
+  border-radius: 32px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px #30363d inset;
+  text-align: center;
+}
+
+h3 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  background: linear-gradient(135deg, #79c0ff, #b392f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(121, 192, 255, 0.3);
+}
+
+/* Button container */
+.counter-container > div:first-of-type {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+/* Buttons */
+button {
+  background: #21262d;
+  border: 1px solid #3d444d;
+  color: #c9d1d9;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.8rem 1.5rem;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  font-family: 'Fira Code', 'Courier New', monospace;
+  flex: 0 1 auto;
+}
+
+button:hover {
+  background: #2d333c;
+  border-color: #6e7681;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.6);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+button:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+/* Result area */
+.counter-container > div:last-of-type {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 20px;
+  padding: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #79c0ff;
+  font-family: 'Fira Code', monospace;
+  text-shadow: 0 0 8px #79c0ff;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .counter-container {
+    padding: 1.8rem 1rem;
+  }
+
+  h3 {
+    font-size: 2rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .counter-container > div:last-of-type {
+    font-size: 1.5rem;
+    padding: 1.5rem;
+  }
+}

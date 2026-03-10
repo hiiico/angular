@@ -1,0 +1,29 @@
+<div class="posts-container">
+    <div class="error">
+        <button class="btn retry-btn" (click)="loadAll()">Load all</button>
+    </div>
+
+    <!-- Posts Grid -->
+    @if (posts.length) {
+    <div class="posts-grid">
+        @for (post of posts; track post.id) {
+        <div class="post-card">
+            <h4 class="post-title">{{ post.title }}</h4>
+            <p class="post-body">{{ post.body }}</p>
+            <div class="post-meta">
+                <span>📌 Post #{{ post.id }}</span>
+                <button class="btn retry-btn" (click)="delete(post.id)" >Delete</button>
+                <span>👤 User {{ post.userId }}</span>
+
+            </div>
+        </div>
+        }
+    </div>
+    }
+    <!-- No posts (shouldn't happen normally) -->
+    @if (posts.length === 0) {
+    <div class="no-posts">
+        <p>No posts found.</p>
+    </div>
+    }
+</div>

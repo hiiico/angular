@@ -1,0 +1,255 @@
+/* about.component.css */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #0b0f1c 0%, #1a1f35 100%);
+  color: white;
+  padding: 5rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 70%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(100,108,255,0.2) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.brand {
+  background: linear-gradient(135deg, #a5b4ff, #6c7aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #e0e4ff;
+  font-weight: 300;
+}
+
+/* Mission Section */
+.mission {
+  padding: 4rem 0;
+  background: #f8faff;
+}
+
+.mission-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #1a1f35;
+  margin-bottom: 1.5rem;
+  position: relative;
+  text-align: center;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #6c7aff, #ffd966);
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+.mission p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #2a2f45;
+}
+
+/* Tools Section */
+.tools {
+  padding: 5rem 0;
+  background: #ffffff;
+}
+
+.tools-intro {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #5a627a;
+  margin-bottom: 3rem;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.tool-card {
+  background: #f9faff;
+  border-radius: 24px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  border: 1px solid #eaeef5;
+}
+
+.tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(108, 122, 255, 0.1);
+}
+
+.tool-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.tool-card h3 {
+  font-size: 1.5rem;
+  color: #1a1f35;
+  margin-bottom: 0.75rem;
+}
+
+.tool-card p {
+  color: #5a627a;
+  line-height: 1.6;
+}
+
+/* Stats Section */
+.stats {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #1a1f35, #2a2f55);
+  color: white;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 1rem;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #a5b4ff, #ffd966);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 1.2rem;
+  color: #cbd5e0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Team CTA */
+.team-cta {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #6c7aff, #8f9bff);
+  color: white;
+  text-align: center;
+}
+
+.team-cta h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.team-cta p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-primary {
+  background: white;
+  color: #1a1f35;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.btn-primary:hover {
+  background: #f0f2ff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .mission p {
+    font-size: 1.1rem;
+  }
+
+  .tools-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 3rem 0;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+}
