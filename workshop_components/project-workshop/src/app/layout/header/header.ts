@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Logo } from './logo/logo';
+import { MiniBar } from './mini-bar/mini-bar';
+import { NavBar } from './nav-bar/nav-bar';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [Logo, MiniBar, NavBar],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header {
-  isLoggedIn = false;
-}
+export class Header {}

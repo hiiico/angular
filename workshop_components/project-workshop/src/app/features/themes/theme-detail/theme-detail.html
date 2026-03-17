@@ -1,0 +1,27 @@
+@if (themeState$ | async; as state) {
+<!-- Loading overlay (only when switching themes) -->
+@if (state.loading) {
+<div class="loader-overlay">
+  <div class="loader">
+    @if (state.theme) {
+    <span>Loading new theme...</span>
+    } @else {
+    <span>Loading theme...</span>
+    }
+  </div>
+</div>
+}
+
+<!-- Error state -->
+@if (state.error) {
+<div class="error-message">{{ state.error }}</div>
+}
+
+<!-- Success state: theme loaded -->
+@if (!state.loading && !state.error && state.theme) {
+<div class="theme-detail">
+  <a routerLink="/themes">← Back to all themes</a>
+  <app-theme-item [theme]="state.theme" />
+</div>
+}
+}

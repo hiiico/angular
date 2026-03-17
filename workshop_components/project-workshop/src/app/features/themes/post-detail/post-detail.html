@@ -1,0 +1,5 @@
+<div *ngIf="post$ | async as post; else loading">
+  <a [routerLink]="['/themes']">← Back to all themes</a>
+  <app-post-item [post]="post" />
+</div>
+<ng-template #loading>Loading...</ng-template>

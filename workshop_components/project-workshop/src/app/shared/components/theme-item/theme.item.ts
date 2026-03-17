@@ -5,8 +5,8 @@ import { Theme } from '../../interfaces/theme';
   selector: 'app-theme-item',
   imports: [],
   templateUrl: './theme.item.html',
-  styleUrl: './theme.item.css',
+  styleUrls: ['./theme.item.css']
 })
 export class ThemeItem {
-  @Input({ required: true}) theme!: Theme;
+  @Input({ required: true }) theme!: Theme;
 }
