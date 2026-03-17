@@ -1,0 +1,19 @@
+@if (!isLoggedIn()) {
+<ul>
+    <li>
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+    </li>
+    <li>
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+    </li>
+</ul>
+} @else {
+<ul>
+    <li>
+        <a routerLink="/profile" >{{username()}}'s profile</a>
+    </li>
+    <li>
+        <a (click)="onLogout()">Logout</a>
+    </li>
+</ul>
+}
