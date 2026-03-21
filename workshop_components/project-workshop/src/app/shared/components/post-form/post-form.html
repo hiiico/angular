@@ -1,0 +1,9 @@
+<div class="answer-comment">
+    <p><span>{{ currentUsername }}</span> comment:</p>
+    <div class="answer">
+        <form (ngSubmit)="onAddPost(commentText.value)" #commentForm="ngForm">
+            <textarea name="postText" id="comment" cols="30" rows="10" #commentText required></textarea>
+            <button type="submit" [disabled]="commentForm.invalid">Post</button>
+        </form>
+    </div>
+</div>

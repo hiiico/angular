@@ -1,0 +1,16 @@
+<aside>
+    @if (posts$ | async; as posts) {
+    <div class="aside">
+        <h2 class="title">Recent posts</h2>
+        <div>
+            @for (post of posts; track post._id) {
+            <!-- post component-->
+            <app-post-item [post]="post" />
+            <a [routerLink]="['/posts', post._id]">
+                View Details
+            </a>
+            }
+        </div>
+    </div>
+    }
+</aside>
