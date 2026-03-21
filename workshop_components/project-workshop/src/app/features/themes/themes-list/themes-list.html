@@ -1,23 +1,12 @@
-<main>
-  <!-- Loading state -->
-  @if (loading$ | async) {
-    <div class="loader">Loading themes...</div>
-  }
-
-  <!-- Error state -->
-  @if (error$ | async; as error) {
-    <div class="error-message">{{ error }}</div>
-  }
-
-  <!-- Success state: themes loaded -->
-  @if (!(loading$ | async) && !(error$ | async)) {
+<div class="container">
+  <!-- theme content  -->
+  <div class="theme-content">
     @if (themes$ | async; as themes) {
-      <div class="theme-title">
-        @for (theme of themes; track theme._id) {
-          <app-theme-item [theme]="theme" />
-          <a [routerLink]="['/themes', theme._id]">View Details</a>
-        }
-      </div>
+    @for (theme of themes; track theme._id) {
+    <app-theme-item [theme]="theme" />
     }
-  }
-</main>
+    } @else {
+    <div>Loading...</div>
+    }
+  </div>
+</div>

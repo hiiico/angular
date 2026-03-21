@@ -1,0 +1,7 @@
+.logo-wrap > img {
+    height: 15vh;
+    margin-right: 3vw;
+    margin-left: -4vw;
+    border-radius: 50%;
+    object-fit: cover;
+}

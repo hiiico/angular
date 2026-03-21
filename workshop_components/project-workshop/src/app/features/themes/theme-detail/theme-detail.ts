@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Observable, switchMap, map, filter, catchError, startWith, of } from 'rxjs';
 import { ThemeService } from '../../../core/services/theme-service/theme-service';
-import { Theme } from '../../../shared/interfaces/theme';
-import { ThemeItem } from '../../../shared/components/theme-item/theme.item';
+import { Theme } from '../../../shared/interfaces/theme'; 
 import { AsyncPipe } from '@angular/common';
+import { ThemeItem } from '../../../shared/components/theme-item/theme.item';
 
 @Component({
   selector: 'app-theme-detail',
