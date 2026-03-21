@@ -1,57 +1,63 @@
+// src/app/features/auth/register/register.ts
 import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../core/services/auth-service/auth-service';
-import { User, UserCredentials } from '../../../shared/interfaces/user';
 import { UserService } from '../../../core/services/user-service/user';
 
 @Component({
   selector: 'app-register',
+  standalone: true,
   imports: [FormsModule, RouterLink],
   templateUrl: './register.html',
-  styleUrl: './register.css',
+  styleUrls: ['./register.css']
 })
 export class Register {
-  private authService = inject(AuthService);
   private userService = inject(UserService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   username = '';
   email = '';
-  tel = '';
   password = '';
   rePassword = '';
+  tel = '';
+  errorMessage = '';
 
-  onRegister(): void {
-    if (!this.email) {
-      alert('Email is required!');
-      return;
-    }
-
-    if (!this.password) {
-      alert('Password is required!');
+  async onRegister(): Promise<void> {
+    if (!this.username || !this.email || !this.password || !this.rePassword) {
+      this.errorMessage = 'Please fill in all required fields';
       return;
     }
 
     if (this.password !== this.rePassword) {
-      alert("Password don't match!");
+      this.errorMessage = 'Passwords do not match';
       return;
     }
 
-    const newUser: UserCredentials = {
-      _id: this.generateId(),
-      username: this.username,
-      email: this.email,
-      tel: '+359' + this.tel,
-      password: this.password,
-    };
+    if (this.password.length < 6) {
+      this.errorMessage = 'Password must be at least 6 characters';
+      return;
+    }
 
-    const userSession = this.userService.register(newUser);
-    this.authService.setSession(userSession);
-    this.router.navigate(['/themes']);
-  }
+    try {
+      const newUser = await firstValueFrom(this.userService.register({
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        tel: this.tel
+      }));
 
-  private generateId(): string {
-    return Math.random().toString(36).substring(2, 15);
+      if (newUser) {
+        this.authService.setSession(newUser);
+        this.router.navigate(['/themes']);
+      } else {
+        this.errorMessage = 'Registration failed. Please try again.';
+      }
+    } catch (error) {
+      this.errorMessage = 'Registration failed. Please try again.';
+      console.error('Registration error:', error);
+    }
   }
 }

@@ -1,24 +1,27 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { inject } from '@angular/core';
+// src/app/shared/components/post-form/post-form.component.ts
+import { Component, EventEmitter, inject, Input, Output, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { PostService } from '../../../core/services/post-service/post-service';
 import { AuthService } from '../../../core/services/auth-service/auth-service';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-post-form',
+  standalone: true,
   imports: [FormsModule],
   templateUrl: './post-form.html',
-  styleUrl: './post-form.css',
+  styleUrls: ['./post-form.css']
 })
-export class PostFormComponent {
+export class PostFormComponent implements OnInit {
   @Input() themeId!: string;
   @Output() postCreated = new EventEmitter<void>();
 
   private postService = inject(PostService);
   private authService = inject(AuthService);
 
-  get currentUsername(): string {
-    return this.authService.currentUser()?.username || 'Guest';
+  currentUsername = 'Guest';
+
+  ngOnInit(): void {
+    this.currentUsername = this.authService.getCurrentUsername();
   }
 
   onAddPost(content: string): void {
@@ -26,17 +29,17 @@ export class PostFormComponent {
       console.error('No themeId provided to PostFormComponent');
       return;
     }
-    const userId = this.authService.currentUser()?._id;
-    if (!userId) {
+
+    if (!this.authService.isLoggedIn()) {
       console.error('User not logged in');
       return;
     }
 
-    this.postService.createPost(this.themeId, content, userId).subscribe({
+    this.postService.createPost(this.themeId, content).subscribe({
       next: () => {
         this.postCreated.emit();
       },
-      error: (err) => console.error('Error creating post', err)
+      error: (err: Error) => console.error('Error creating post', err)
     });
   }
 }

@@ -2,15 +2,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Post } from '../../../shared/interfaces/post';
 import { PostService } from '../../../core/services/post-service/post-service';
 import { PostItem } from '../../../shared/components/post-item/post.item';
 
 @Component({
   selector: 'app-recent-posts',
-  standalone: true,                         // adjust if not using standalone
-  imports: [AsyncPipe, PostItem], // import necessary pipes and the post item component
+  standalone: true,
+  imports: [AsyncPipe, PostItem],
   templateUrl: './recent-posts.html',
   styleUrls: ['./recent-posts.css']
 })
@@ -22,7 +22,7 @@ export class RecentPosts implements OnInit {
   error: string | null = null;
 
   ngOnInit(): void {
-    this.posts$ = this.postService.getAllPosts().pipe(
+    this.posts$ = this.postService.getLatestPosts(5).pipe(
       tap({
         next: () => (this.loading = false),
         error: (err) => {
@@ -31,11 +31,6 @@ export class RecentPosts implements OnInit {
           console.error(err);
         }
       }),
-      // Sort posts by creation date, most recent first
-      map(posts => posts.sort((a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      )),
-      // In case of error, emit an empty array (but we already set error flag)
       catchError(err => {
         console.error(err);
         return of([]);

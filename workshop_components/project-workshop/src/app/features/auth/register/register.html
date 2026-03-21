@@ -1,5 +1,9 @@
 <div class="container">
-<form class="register" (ngSubmit) = "onRegister()">
+<form
+  class="register"
+  (ngSubmit) = "onRegister()"
+  #registerForm="ngForm"
+>
 
     <fieldset>
         <h2>Registration Form</h2>
@@ -7,11 +11,11 @@
         <!-- username -->
         <p class="field field-icon">
             <label for="username"><span><i class="fas fa-user"></i></span></label>
-            <input 
-            class="input-error" 
-            type="text" 
-            name="username" 
-            id="username" 
+            <input
+            class="input-error"
+            type="text"
+            name="username"
+            id="username"
             placeholder="Johny"
             [(ngModel)]="username"
             />
@@ -23,10 +27,10 @@
         <!-- email -->
         <p class="field field-icon">
             <label for="email"><span><i class="fas fa-envelope"></i></span></label>
-            <input 
-            type="email" 
-            name="email" 
-            id="email" 
+            <input
+            type="email"
+            name="email"
+            id="email"
             placeholder="john.doe@gmail.com"
             [(ngModel)]="email"
             />
@@ -44,10 +48,10 @@
             <select name="select-tel" id="select-tel" class="tel">
                 <option value="00359">+359</option>
             </select>
-            <input 
-            type="text" 
-            name="tel" 
-            id="tel" 
+            <input
+            type="text"
+            name="tel"
+            id="tel"
             placeholder="885 888 888"
             [(ngModel)]="tel"
             />
@@ -56,10 +60,10 @@
         <!-- password -->
         <p class="field field-icon">
             <label for="password"><span><i class="fas fa-lock"></i></span></label>
-            <input 
-            type="password" 
-            name="password" 
-            id="password" 
+            <input
+            type="password"
+            name="password"
+            id="password"
             placeholder="******"
             [(ngModel)]="password"
             />
@@ -74,10 +78,10 @@
         <!-- rePassword -->
         <p class="field field-icon">
             <label for="rePassword"><span><i class="fas fa-lock"></i></span></label>
-            <input 
-            type="password" 
-            name="rePassword" 
-            id="rePassword" 
+            <input
+            type="password"
+            name="rePassword"
+            id="rePassword"
             placeholder="******"
             [(ngModel)]="rePassword"
             />
