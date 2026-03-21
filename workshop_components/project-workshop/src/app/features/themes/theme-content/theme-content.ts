@@ -9,7 +9,7 @@ import { AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ThemeItem } from '../../../shared/components/theme-item/theme.item';
 import { PostItem } from '../../../shared/components/post-item/post.item';
-import { PostFormComponent } from '../../../shared/components/post-form/post-form';
+import {PostFormComponent} from '../../../shared/components/post-form/post-form.component';
 
 @Component({
   selector: 'app-theme-content',

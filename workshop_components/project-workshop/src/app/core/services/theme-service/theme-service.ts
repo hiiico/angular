@@ -1,28 +1,38 @@
+// src/app/core/services/theme-service/theme-service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap, shareReplay, catchError } from 'rxjs/operators';
-import { Theme } from '../../../shared/interfaces/theme'; 
+import { Theme } from '../../../shared/interfaces/theme';
+import { ApiService } from '../api-service/api.service';
+
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private apiUrl = 'http://localhost:3000/api'; // adjust to your API
-  private themesCache$?: Observable<Theme[]>;
+  private themesCache$: Observable<Theme[]> | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private apiService: ApiService) {}
 
- getThemes(): Observable<Theme[]> {
-  if (!this.themesCache$) {
-    this.themesCache$ = this.http.get<Theme[]>(`${this.apiUrl}/themes`).pipe(
-      tap(themes => console.log('Themes received:', themes)),
-      shareReplay(1)
-    );
+  getThemes(): Observable<Theme[]> {
+    if (!this.themesCache$) {
+      this.themesCache$ = this.apiService.getThemes().pipe(
+        tap(themes => console.log('Themes received:', themes.length)),
+        shareReplay(1)
+      );
+    }
+    return this.themesCache$;
   }
-  return this.themesCache$;
-}
 
   getThemeById(themeId: string): Observable<Theme | null> {
-    return this.getThemes().pipe(
-      map(themes => themes.find(theme => theme._id === themeId) ?? null)
+    return this.apiService.getThemeById(themeId).pipe(
+      catchError(err => {
+        console.error('Error getting theme by ID:', err);
+        return of(null);
+      })
+    );
+  }
+
+  createTheme(themeName: string, postText: string): Observable<Theme> {
+    return this.apiService.createTheme(themeName, postText).pipe(
+      tap(() => this.themesCache$ = null)
     );
   }
 }
