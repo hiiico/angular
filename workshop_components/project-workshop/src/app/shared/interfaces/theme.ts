@@ -3,6 +3,7 @@ export interface Theme {
     themeName: string,
     created_at: string,
     userId: {
+        _id:string,
         username: string
     };
     subscribers: string[],

@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { Post } from '../../interfaces/post';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-post-item',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './post.item.html',
   styleUrl: './post.item.css',
 })

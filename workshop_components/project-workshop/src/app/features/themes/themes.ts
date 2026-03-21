@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { ThemesList } from './themes-list/themes-list';
-import { RecentPosts } from './recent-posts/recent-posts';
+import { ThemeContent } from './theme-content/theme-content';
+
 
 @Component({
   selector: 'app-themes',
-  imports: [ThemesList, RecentPosts],
+  imports: [ThemeContent],
   templateUrl: './themes.html',
   styleUrl: './themes.css',
 })

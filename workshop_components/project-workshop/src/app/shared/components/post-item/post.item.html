@@ -1,7 +1,18 @@
-<div class="aside-theme">
-    <a href="#">
-        <h3>{{ post.themeId.themeName }}</h3>
-        <p>{{ post.userId.username }}</p>
-        <p><span>{{ post.created_at }}</span></p>
-    </a>
+<div class="comment">
+  <header class="header">
+    <p><span>{{ post.userId.username }}</span> posted on <time>{{ post.created_at | date:'medium' }}</time></p>
+  </header>
+  <div class="comment-main">
+    <div class="userdetails">
+      <img src="../profile.png" alt="avatar">
+    </div>
+    <div class="post-content">
+      <p>{{ post.text }}</p>
+    </div>
+  </div>
+  <div class="footer">
+    <!-- <i class="fas fa-thumbs-up"></i>
+    <i class="fas fa-thumbs-down"></i> -->
+    <p><span>{{ post.likes?.length || 0 }}</span> likes</p>
+  </div>
 </div>
