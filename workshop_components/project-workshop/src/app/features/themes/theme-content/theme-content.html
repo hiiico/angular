@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="theme-content">
+    <!-- Theme details -->
+    @if (theme$ | async; as theme) {
+    <app-theme-item [theme]="theme" />
+    } @else {
+    <div>Loading theme...</div>
+    }
+
+    <!-- Posts list -->
+    @if (posts$ | async; as posts) {
+    <h2 class="title">Recent posts</h2>
+    @for (post of posts; track post._id) {
+    <app-post-item [post]="post" />
+    }
+    } @else {
+    <div>Loading posts...</div>
+    }
+
+    <!-- Post form -->
+    @if (theme$ | async; as theme) {
+    <app-post-form [themeId]="theme._id" 
+    (postCreated)="refreshPosts()" />
+    }
+  </div>
+</div>
