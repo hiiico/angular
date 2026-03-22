@@ -1,100 +1,143 @@
 <div class="container">
-<form
-  class="register"
-  (ngSubmit) = "onRegister()"
-  #registerForm="ngForm"
->
-
+  <form
+    class="register"
+    #registerForm="ngForm"
+    appMatchPassword="rePassword"
+    (ngSubmit)="onRegister(registerForm)"
+  >
     <fieldset>
-        <h2>Registration Form</h2>
+      <h2>Registration Form</h2>
 
-        <!-- username -->
-        <p class="field field-icon">
-            <label for="username"><span><i class="fas fa-user"></i></span></label>
-            <input
-            class="input-error"
-            type="text"
-            name="username"
-            id="username"
-            placeholder="Johny"
-            [(ngModel)]="username"
-            />
+      <!-- username -->
+      <p class="field field-icon">
+        <label for="username"><span><i class="fas fa-user"></i></span></label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Johny"
+          [(ngModel)]="username"
+          #usernameCtrl="ngModel"
+          required
+          minlength="3"
+        />
+      </p>
+      @if (usernameCtrl.invalid && (usernameCtrl.dirty || usernameCtrl.touched)) {
+        <p class="error">
+          @if (usernameCtrl.errors?.['required']) {
+            <span>Username is required!</span>
+          }
+          @if (usernameCtrl.errors?.['minlength']) {
+            <span>Username must be at least 3 characters!</span>
+          }
         </p>
-        <!-- <p class="error">
-            Username is required!
-        </p> -->
+      }
 
-        <!-- email -->
-        <p class="field field-icon">
-            <label for="email"><span><i class="fas fa-envelope"></i></span></label>
-            <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="john.doe@gmail.com"
-            [(ngModel)]="email"
-            />
+      <!-- email -->
+      <p class="field field-icon">
+        <label for="email"><span><i class="fas fa-envelope"></i></span></label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="john.doe@gmail.com"
+          [(ngModel)]="email"
+          #emailCtrl="ngModel"
+          required
+          email
+        />
+      </p>
+      @if (emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)) {
+        <p class="error">
+          @if (emailCtrl.errors?.['required']) {
+            <span>Email is required!</span>
+          }
+          @if (emailCtrl.errors?.['email']) {
+            <span>Email is not valid!</span>
+          }
         </p>
-        <!-- <p class="error">
-                    Email is required!
-                </p>
-                <p class="error">
-                    Email is not valid!
-                </p> -->
+      }
 
-        <!-- telephone -->
-        <p class="field field-icon">
-            <label for="tel"><span><i class="fas fa-phone"></i></span></label>
-            <select name="select-tel" id="select-tel" class="tel">
-                <option value="00359">+359</option>
-            </select>
-            <input
-            type="text"
-            name="tel"
-            id="tel"
-            placeholder="885 888 888"
-            [(ngModel)]="tel"
-            />
+      <!-- telephone -->
+      <p class="field field-icon">
+        <label for="tel"><span><i class="fas fa-phone"></i></span></label>
+        <select name="select-tel" id="select-tel" class="tel">
+          <option value="00359">+359</option>
+        </select>
+        <input
+          type="text"
+          name="tel"
+          id="tel"
+          placeholder="885 888 888"
+          [(ngModel)]="tel"
+          #telCtrl="ngModel"
+        />
+      </p>
+      <!-- optional: add validation for tel if needed -->
+
+      <!-- password -->
+      <p class="field field-icon">
+        <label for="password"><span><i class="fas fa-lock"></i></span></label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="******"
+          [(ngModel)]="password"
+          #passwordCtrl="ngModel"
+          required
+          minlength="6"
+        />
+      </p>
+      @if (passwordCtrl.invalid && (passwordCtrl.dirty || passwordCtrl.touched)) {
+        <p class="error">
+          @if (passwordCtrl.errors?.['required']) {
+            <span>Password is required!</span>
+          }
+          @if (passwordCtrl.errors?.['minlength']) {
+            <span>Password must be at least 6 characters!</span>
+          }
         </p>
+      }
 
-        <!-- password -->
-        <p class="field field-icon">
-            <label for="password"><span><i class="fas fa-lock"></i></span></label>
-            <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="******"
-            [(ngModel)]="password"
-            />
+      <!-- rePassword -->
+      <p class="field field-icon">
+        <label for="rePassword"><span><i class="fas fa-lock"></i></span></label>
+        <input
+          type="password"
+          name="rePassword"
+          id="rePassword"
+          placeholder="******"
+          [(ngModel)]="rePassword"
+          #rePasswordCtrl="ngModel"
+          required
+        />
+      </p>
+      @if (
+        (rePasswordCtrl.invalid && (rePasswordCtrl.dirty || rePasswordCtrl.touched)) ||
+        registerForm.errors?.['mismatch']
+        ) {
+        <p class="error">
+          @if (rePasswordCtrl.errors?.['required']) {
+            <span>Repeat Password is required!</span>
+          }
+          @if (registerForm.errors?.['mismatch']) {
+            <span>Passwords do not match!</span>
+          }
         </p>
-        <!-- <p class="error">
-                    Password is required!
-                </p>
-                <p class="error">
-                    Password must be at least 4 characters!
-                </p> -->
+      }
 
-        <!-- rePassword -->
-        <p class="field field-icon">
-            <label for="rePassword"><span><i class="fas fa-lock"></i></span></label>
-            <input
-            type="password"
-            name="rePassword"
-            id="rePassword"
-            placeholder="******"
-            [(ngModel)]="rePassword"
-            />
-        </p>
-        <!-- <p class="error">Repeat Password does not match password!</p> -->
+      <!-- Global server error -->
+      @if (errorMessage) {
+        <p class="error">{{ errorMessage }}</p>
+      }
 
-        <button type="submit">Create Account</button>
+      <button type="submit" [disabled]="registerForm.invalid">Create Account</button>
 
-        <p class="text-center">
-            Have an account?
-            <a [routerLink]="['/login']">Log In</a>
-        </p>
-
+      <p class="text-center">
+        Have an account?
+        <a [routerLink]="['/login']">Log In</a>
+      </p>
     </fieldset>
-</form>
+  </form>
 </div>
