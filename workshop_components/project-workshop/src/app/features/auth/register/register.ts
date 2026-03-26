@@ -1,22 +1,19 @@
-// src/app/features/auth/register/register.ts
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { FormsModule, NgForm } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
-
-import { AuthService } from '../../../core/services/auth-service/auth-service';
-import { UserService } from '../../../core/services/user-service/user';
-import { MatchPasswordDirective } from './match-password.directive';
+import {Component, inject} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
+import {FormsModule, NgForm} from '@angular/forms';
+import {AuthService} from '../../../core/services/auth-service/auth-service';
+import {MatchPasswordDirective} from './directives/match-password.directive';
+import {FormInputComponent} from './form-input/form-input.component';
+import {PhoneInputComponent} from './phone-input/phone-input.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, RouterLink, MatchPasswordDirective],
+  imports: [FormsModule, RouterLink, MatchPasswordDirective, FormInputComponent, PhoneInputComponent],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
 })
 export class Register {
-  private userService = inject(UserService);
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -31,23 +28,15 @@ export class Register {
     if (form.invalid) return;
 
     try {
-      const newUser = await firstValueFrom(
-        this.userService.register({
-          username: this.username,
-          email: this.email,
-          password: this.password,
-          tel: this.tel,
-        })
-      );
-
-      if (newUser) {
-        this.authService.setSession(newUser);
-        await this.router.navigate(['/themes']);
-      } else {
-        this.errorMessage = 'Registration failed. Please try again.';
-      }
-    } catch (error) {
-      this.errorMessage = 'Registration failed. Please try again.';
+      await this.authService.register({
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        tel: this.tel,
+      });
+      await this.router.navigate(['/themes']);
+    } catch (error: any) {
+      this.errorMessage = error?.error?.message || error?.message || 'Registration failed. Please try again.';
       console.error('Registration error:', error);
     }
   }

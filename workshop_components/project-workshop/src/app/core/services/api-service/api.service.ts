@@ -1,26 +1,18 @@
-// src/app/core/services/api-service/api.service.ts
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Theme } from '../../../shared/interfaces/theme';
-import { Post } from '../../../shared/interfaces/post';
-import { User, UserCredentials } from '../../../shared/interfaces/user';
 import { environment } from '../../../../environments/environment';
+import { User, UserCredentials } from '../../../shared/interfaces/user';
+import {CreateThemeRequest, Theme} from '../../../shared/interfaces/theme';
+import { Post } from '../../../shared/interfaces/post';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private apiUrl = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken');
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token ? `Bearer ${token}` : ''
-    });
-  }
+  private http = inject(HttpClient);
+  // All authenticated requests must include credentials (cookies)
+  private httpOptions = { withCredentials: true };
 
   private handleError(error: HttpErrorResponse) {
     const message = error.error?.message || `Error ${error.status}: ${error.message}`;
@@ -37,44 +29,57 @@ export class ApiService {
       rePassword: user.password,
       tel: user.tel
     };
-    return this.http.post<User>(`${this.apiUrl}/register`, payload).pipe(
-      tap(u => localStorage.setItem('user', JSON.stringify(u))),
+    return this.http.post<User>(`${this.apiUrl}/register`, payload, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
   login(email: string, password: string): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap(user => localStorage.setItem('user', JSON.stringify(user))),
+    return this.http.post<User>(`${this.apiUrl}/login`, { email, password }, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/logout`, {}, { headers: this.getAuthHeaders() }).pipe(
-      tap(() => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('authToken');
-      }),
+    return this.http.post(`${this.apiUrl}/logout`, {}, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // ========== Profile ==========
+  getProfile(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/users/profile`, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateProfile(profile: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/profile`, profile, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
   // ========== Themes ==========
   getThemes(): Observable<Theme[]> {
-    return this.http.get<Theme[]>(`${this.apiUrl}/themes`).pipe(
+    return this.http.get<Theme[]>(`${this.apiUrl}/themes`, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
   getThemeById(id: string): Observable<Theme> {
-    return this.http.get<Theme>(`${this.apiUrl}/themes/${id}`).pipe(
+    return this.http.get<Theme>(`${this.apiUrl}/themes/${id}`, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
-  createTheme(themeName: string, postText: string): Observable<Theme> {
-    return this.http.post<Theme>(`${this.apiUrl}/themes`, { themeName, postText }, { headers: this.getAuthHeaders() }).pipe(
+  createTheme(data: CreateThemeRequest): Observable<Theme> {
+    return this.http.post<Theme>(`${this.apiUrl}/themes`, data, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateThemeSubscribers(themeId: string, subscribers: string[]): Observable<Theme> {
+    return this.http.put<Theme>(`${this.apiUrl}/themes/${themeId}`, { subscribers }, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
@@ -87,41 +92,20 @@ export class ApiService {
   }
 
   getLatestPosts(limit: number = 5): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.apiUrl}/posts?limit=${limit}`).pipe(
+    return this.http.get<Post[]>(`${this.apiUrl}/posts?limit=${limit}`, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
   createPost(themeId: string, postText: string): Observable<Theme> {
-    return this.http.post<Theme>(`${this.apiUrl}/themes/${themeId}`, { postText }, { headers: this.getAuthHeaders() }).pipe(
+    return this.http.post<Theme>(`${this.apiUrl}/themes/${themeId}`, { postText }, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
   likePost(postId: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/likes/${postId}`, {}, { headers: this.getAuthHeaders() }).pipe(
+    return this.http.put(`${this.apiUrl}/likes/${postId}`, {}, this.httpOptions).pipe(
       catchError(this.handleError)
     );
-  }
-
-  // ========== Users ==========
-  getCurrentUser(): Observable<User | null> {
-    const stored = localStorage.getItem('user');
-    if (stored) return of(JSON.parse(stored));
-    return of(null);
-  }
-
-  // Compatibility with old code (if needed)
-  getUserById(id: string): Observable<User> {
-    const stored = localStorage.getItem('user');
-    if (stored) {
-      const user = JSON.parse(stored);
-      if (user._id === id) return of(user);
-    }
-    return throwError(() => new Error('User not found'));
-  }
-
-  validateCredentials(username: string, password: string): Observable<User | null> {
-    return this.login(username, password).pipe(catchError(() => of(null)));
   }
 }

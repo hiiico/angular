@@ -1,51 +1,68 @@
+<!-- src/app/features/auth/login/login.html -->
 <div class="container">
-    <form class="login" (ngSubmit)="onLogin()">
+  <form class="login" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <fieldset>
+      <h2>Login Form</h2>
 
-        <fieldset>
-            <h2>Login Form</h2>
+      <!-- email field -->
+      <p class="field field-icon">
+        <label for="email"><span><i class="fas fa-envelope"></i></span></label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="john.doe@gmail.com"
+          appInputErrorDirective
+        />
+      </p>
+      <!-- email errors -->
+      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+        <p class="input-error">
+          @if (loginForm.get('email')?.errors?.['required']) {
+            <span>Email is required!</span>
+          }
+          @if (loginForm.get('email')?.errors?.['invalidEmail']) {
+            <span>Email must be a valid Gmail address (.bg or .com).</span>
+          }
+        </p>
+      }
 
-            <p class="field field-icon">
-                <label for="email"><span><i class="fas fa-envelope"></i></span></label>
-                <input
-                class="input-error"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="john.doe@gmail.com"
-                [(ngModel)]="email"
-                />
-            </p>
-            <p class="error">
-                <!-- Email is required! -->
-            </p>
-            <!-- <p class="error">
-                    Email is not valid!
-                </p> -->
+      <!-- password field -->
+      <p class="field field-icon">
+        <label for="password"><span><i class="fas fa-lock"></i></span></label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="******"
+          appInputErrorDirective
+        />
+      </p>
+      <!-- password errors -->
+      @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+        <p class="input-error">
+          @if (loginForm.get('password')?.errors?.['required']) {
+            <span>Password is required!</span>
+          }
+          @if (loginForm.get('password')?.errors?.['minlength']) {
+            <span>Password must be at least 5 characters!</span>
+          }
+        </p>
+      }
 
-            <p class="field field-icon">
-                <label for="password"><span><i class="fas fa-lock"></i></span></label>
-                <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="******"
-                [(ngModel)]="password"
-                />
-            </p>
-            <!-- <p class="error">
-                    Password is required!
-                </p>
-                <p class="error">
-                    Password must be at least 4 characters!
-                </p> -->
+      <!-- global error message -->
+      @if (errorMessage) {
+        <p class="input-error">{{ errorMessage }}</p>
+      }
 
-            <button type="submit">Login</button>
+      <button type="submit" [disabled]="loginForm.invalid || isLoading">
+        {{ isLoading ? 'Logging in...' : 'Login' }}
+      </button>
 
-            <p class="text-center">
-                Have an account?
-                <a [routerLink]="['/register']">Register</a>
-            </p>
-
-        </fieldset>
-    </form>
+      <p class="text-center">
+        Have an account?
+        <a [routerLink]="['/register']">Register</a>
+      </p>
+    </fieldset>
+  </form>
 </div>

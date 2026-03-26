@@ -1,10 +1,10 @@
-// src/app/shared/interfaces/user.ts
+// src/app/shared/interfaces/user-service.ts
 export interface User {
   _id: string;
   username: string;
   email: string;
   tel?: string;
-  themes: string[];      // array of theme IDs
+  themes?: string[];      // array of theme IDs
   posts: string[];       // array of post IDs
   created_at: string;
   updatedAt?: string;

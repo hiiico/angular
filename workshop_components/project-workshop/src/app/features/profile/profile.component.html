@@ -1,0 +1,77 @@
+<!-- src/app/features/profile/profile.component.html -->
+<div class="container">
+  <div class="profile">
+    <img src="../images/profile.png" alt="default user">
+    <h3>User Info:</h3>
+
+    @if (isLoading) {
+      <div class="loading">Loading profile...</div>
+    }
+
+    @if (errorMessage) {
+      <div class="error">{{ errorMessage }}</div>
+    }
+
+    <form (ngSubmit)="onSave()" #profileForm="ngForm">
+      <div class="flex">
+        <p>Username:</p>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          [(ngModel)]="profile.username"
+          required
+        />
+      </div>
+      <div class="flex">
+        <p>Email:</p>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          [(ngModel)]="profile.email"
+          required
+          email
+        />
+      </div>
+      <div class="flex">
+        <p>Phone:</p>
+        <div>
+          <select
+            name="select-tel"
+            id="select-tel"
+            class="tel"
+            [(ngModel)]="selectedPrefix"
+            (ngModelChange)="updatePhone()"
+          >
+            @for (prefix of phonePrefixes; track prefix) {
+              <option [value]="prefix">{{ prefix }}</option>
+            }
+          </select>
+          <input
+            type="text"
+            name="tel"
+            id="tel"
+            [(ngModel)]="phoneNumber"
+            (ngModelChange)="updatePhone()"
+          />
+        </div>
+      </div>
+      <button
+        type="button"
+        class="red-button"
+        (click)="onCancel()"
+        [disabled]="isLoading"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="green-button"
+        [disabled]="profileForm.invalid || isLoading"
+      >
+        {{ isLoading ? 'Saving...' : 'Save' }}
+      </button>
+    </form>
+  </div>
+</div>

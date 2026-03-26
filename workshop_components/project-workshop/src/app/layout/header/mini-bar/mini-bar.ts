@@ -14,9 +14,8 @@ export class MiniBar {
   isLoggedIn = this.authService.isLoggedIn;
                             // get currentUser if exist get name if not set to empty str.
   username = computed(() => this.authService.currentUser()?.username ?? '');
- 
-  onLogout(): void {
-    this.authService.logout();
-    this.router.navigate(['/home']);
+
+  async onLogout(): Promise<void> {
+    await this.authService.logout('/home');
   }
 }

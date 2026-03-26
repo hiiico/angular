@@ -94,10 +94,20 @@ function getProfileInfo(req, res, next) {
 
 function editProfileInfo(req, res, next) {
     const { _id: userId } = req.user;
-    const { tel, username, email } = req.body;
+    const { tel, username, email, themes } = req.body;
 
-    userModel.findOneAndUpdate({ _id: userId }, { tel, username, email }, { runValidators: true, new: true })
-        .then(x => { res.status(200).json(x) })
+    const updateData = {};
+    if (tel !== undefined) updateData.tel = tel;
+    if (username !== undefined) updateData.username = username;
+    if (email !== undefined) updateData.email = email;
+    if (themes !== undefined) updateData.themes = themes; // accept themes array
+
+    userModel.findOneAndUpdate(
+        { _id: userId },
+        updateData,
+        { runValidators: true, new: true }
+    )
+        .then(user => res.status(200).json(user))
         .catch(next);
 }
 

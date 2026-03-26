@@ -1,0 +1,38 @@
+<!-- src/app/features/auth/register/phone-input.component.html -->
+<p class="field field-icon">
+  <label for="tel"><span><i class="fas fa-phone"></i></span></label>
+  <select
+    [name]="name + '_prefix'"
+    id="select-tel"
+    class="tel"
+    [(ngModel)]="selectedPrefix"
+    (ngModelChange)="updateValue()"
+  >
+    @for (prefix of prefixes; track prefix) {
+      <option [value]="prefix">{{ prefix }}</option>
+    }
+  </select>
+  <input
+    [type]="type"
+    [name]="name"
+    [id]="id"
+    [placeholder]="placeholder"
+    [(ngModel)]="numberValue"
+    (ngModelChange)="updateValue()"
+    (blur)="onBlur()"
+    [attr.required]="required ? '' : null"
+    [attr.minlength]="minlength || null"
+    [attr.maxlength]="maxlength || null"
+    [disabled]="disabled"
+  />
+</p>
+@if (controlInvalid && (touched || dirty)) {
+  <p class="error">
+    @if (errors?.['required']) {
+      <span>{{ label }} is required!</span>
+    }
+    @if (errors?.['minlength']) {
+      <span>{{ label }} must be at least {{ minlength }} characters!</span>
+    }
+  </p>
+}

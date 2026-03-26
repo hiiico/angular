@@ -1,13 +1,10 @@
-// src/app/core/services/auth-service/auth-service.ts
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from '../api-service/api.service';
 import { User } from '../../../shared/interfaces/user';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiService = inject(ApiService);
   private router = inject(Router);
@@ -24,7 +21,7 @@ export class AuthService {
     try {
       const user = await firstValueFrom(this.apiService.login(username, password));
       if (user) {
-        this.user.set(user);
+        this.setSession(user);
         return true;
       }
       return false;
@@ -38,30 +35,36 @@ export class AuthService {
     try {
       const user = await firstValueFrom(this.apiService.register(userData));
       if (user) {
-        this.user.set(user);
+        this.setSession(user);
         return true;
       }
-      return false;
+      throw new Error('Registration failed');
     } catch (error) {
       console.error('Registration error:', error);
-      return false;
+      throw error;
     }
   }
 
-  async logout(): Promise<void> {
-    try {
-      await firstValueFrom(this.apiService.logout());
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      this.user.set(null);
-      this.router.navigate(['/login']);
+  async logout(redirectTo: string = '/login', skipApiCall: boolean = false): Promise<void> {
+    if (!skipApiCall) {
+      try {
+        await firstValueFrom(this.apiService.logout());
+      } catch (error) {
+        console.warn('Backend logout failed, proceeding with local cleanup', error);
+      }
     }
+    this.clearSession();
+    await this.router.navigate([redirectTo]);
   }
 
   setSession(user: User): void {
     this.user.set(user);
     localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  clearSession(): void {
+    this.user.set(null);
+    localStorage.removeItem('user');
   }
 
   checkAuth(): void {

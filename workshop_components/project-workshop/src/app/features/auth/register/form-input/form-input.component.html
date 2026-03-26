@@ -1,0 +1,32 @@
+<!-- src/app/features/auth/register/form-input.component.html -->
+<p class="field field-icon">
+  <label [attr.for]="id">
+    <span><i [class]="iconClass"></i></span>
+  </label>
+  <input
+    #input
+    [type]="type"
+    [id]="id"
+    [name]="name"
+    [placeholder]="placeholder"
+    [value]="value"
+    (input)="onInputChange($event)"
+    (blur)="onTouched()"
+    [attr.required]="required ? '' : null"
+    [attr.minlength]="minlength || null"
+    [attr.email]="email ? '' : null"
+  />
+</p>
+@if (controlInvalid && (touched || dirty)) {
+  <p class="error">
+    @if (errors?.['required']) {
+      <span>{{ label }} is required!</span>
+    }
+    @if (errors?.['minlength']) {
+      <span>{{ label }} must be at least {{ minlength }} characters!</span>
+    }
+    @if (errors?.['email']) {
+      <span>{{ label }} is not valid!</span>
+    }
+  </p>
+}
