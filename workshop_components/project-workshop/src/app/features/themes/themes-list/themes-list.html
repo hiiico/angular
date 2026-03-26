@@ -3,7 +3,10 @@
   <div class="theme-content">
     @if (themes$ | async; as themes) {
     @for (theme of themes; track theme._id) {
-    <app-theme-item [theme]="theme" />
+    <app-theme-item
+      [theme]="theme"
+      (subscriptionChanged)="onSubscriptionChanged()"
+    />
     }
     } @else {
     <div>Loading...</div>

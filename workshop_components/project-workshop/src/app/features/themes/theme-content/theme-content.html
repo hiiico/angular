@@ -2,7 +2,10 @@
   <div class="theme-content">
     <!-- Theme details -->
     @if (theme$ | async; as theme) {
-    <app-theme-item [theme]="theme" />
+    <app-theme-item
+      [theme]="theme"
+      (subscriptionChanged)="onSubscriptionChanged()"
+    />
     } @else {
     <div>Loading theme...</div>
     }
@@ -19,7 +22,7 @@
 
     <!-- Post form -->
     @if (theme$ | async; as theme) {
-    <app-post-form [themeId]="theme._id" 
+    <app-post-form [themeId]="theme._id"
     (postCreated)="refreshPosts()" />
     }
   </div>

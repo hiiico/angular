@@ -1,4 +1,9 @@
 <div class="theme-title">
+  @if (isLoading) {
+    <div class="loading">Loading...</div>
+  } @else if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
+  } @else if (theme) {
   <div class="theme-name-wrapper">
     <div class="theme-name">
       <a [routerLink]="['/themes', theme._id]">
@@ -9,8 +14,12 @@
     </div>
     <div class="subscribers">
       <p>Subscribers: <span>{{ theme.subscribers.length || 0 }}</span></p>
-      <button class="subscribe">Subscribe</button>
-      <button class="unsubscribe">Unsubscribe</button>
+      @if (!isSubscribed) {
+      <button (click)="subscribe()" [disabled]="isLoading" class="subscribe">Subscribe</button>
+      } @else {
+      <button (click)="unsubscribe()" [disabled]="isLoading" class="unsubscribe">Unsubscribe</button>
+      }
     </div>
   </div>
+  }
 </div>

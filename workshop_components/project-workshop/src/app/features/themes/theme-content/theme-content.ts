@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, map, switchMap, catchError, of } from 'rxjs';
+import {Observable, map, switchMap, catchError, of, BehaviorSubject} from 'rxjs';
 import { Theme } from '../../../shared/interfaces/theme';
 import { Post } from '../../../shared/interfaces/post';
 import { ThemeService } from '../../../core/services/theme-service/theme-service';
@@ -22,23 +22,22 @@ export class ThemeContent implements OnInit {
   private themeService = inject(ThemeService);
   private postService = inject(PostService);
 
+  private refreshTrigger = new BehaviorSubject<void>(undefined);
   theme$!: Observable<Theme | null>;
   posts$!: Observable<Post[]>;
 
   ngOnInit(): void {
-    const themeId$ = this.route.params.pipe(
-      map((params) => params['id']),
-    );
+    const themeId$ = this.route.params.pipe(map((params) => params['id']));
 
-    this.theme$ = themeId$.pipe(
-      switchMap((id) =>
-        this.themeService.getThemeById(id).pipe(
-          catchError((err) => {
-            console.error('Error loading theme', err);
-            return of(null);
-          }),
-        ),
-      ),
+    // Combine route params with refresh trigger to reload theme when needed
+    this.theme$ = this.refreshTrigger.pipe(
+      switchMap(() => themeId$),
+      switchMap(id => this.themeService.getThemeById(id).pipe(
+        catchError(err => {
+          console.error('Error loading theme', err);
+          return of(null);
+        })
+      ))
     );
 
     this.loadPosts(themeId$);
@@ -62,5 +61,10 @@ export class ThemeContent implements OnInit {
       map((params) => params['id']),
     );
     this.loadPosts(themeId$);
+  }
+
+  // Called when ThemeItem emits subscriptionChanged event
+  onSubscriptionChanged(): void {
+    this.refreshTrigger.next(); // trigger theme reload
   }
 }

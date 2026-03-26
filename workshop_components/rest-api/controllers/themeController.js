@@ -36,11 +36,18 @@ function createTheme(req, res, next) {
 
 function subscribe(req, res, next) {
     const themeId = req.params.themeId;
-    const { _id: userId } = req.user;
-    themeModel.findByIdAndUpdate({ _id: themeId }, { $addToSet: { subscribers: userId } }, { new: true })
-        .then(updatedTheme => {
-            res.status(200).json(updatedTheme)
-        })
+    const { subscribers } = req.body; // expects full array of user IDs (strings)
+
+    if (!subscribers) {
+        return res.status(400).json({ message: 'subscribers array is required' });
+    }
+
+    themeModel.findByIdAndUpdate(
+        themeId,
+        { $set: { subscribers } },  // replace the array
+        { new: true }               // return the updated document
+    )
+        .then(updatedTheme => res.status(200).json(updatedTheme))
         .catch(next);
 }
 

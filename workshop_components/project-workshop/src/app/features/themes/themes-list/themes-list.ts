@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, catchError, Observable, of, switchMap} from 'rxjs';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { Theme } from '../../../shared/interfaces/theme';
 import { ThemeService } from '../../../core/services/theme-service/theme-service';
@@ -14,11 +14,23 @@ import { ThemeItem } from '../../../shared/components/theme-item/theme.item';
 })
 export class ThemesList implements OnInit {
   private themeService = inject(ThemeService);
+  private refreshTrigger = new BehaviorSubject<void>(undefined);
 
-  themes$!: Observable<Theme[]>;
+  themes$: Observable<Theme[]> = this.refreshTrigger.pipe(
+    switchMap(() => this.themeService.getThemes().pipe(
+      catchError(err => {
+        console.error('Failed to load themes', err);
+        return of([]);
+      })
+    ))
+  );
 
   ngOnInit(): void {
-    this.themes$ = this.themeService.getThemes();
-    console.log(`Themes: ${this.themes$}`)
+    this.refreshTrigger.next();
+  }
+
+  onSubscriptionChanged(): void {
+    // reload the list to update subscriber counts
+    this.refreshTrigger.next();
   }
 }

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Newtheme } from './newtheme';
+import { Newtheme } from './new-theme';
 
 describe('Newtheme', () => {
   let component: Newtheme;
